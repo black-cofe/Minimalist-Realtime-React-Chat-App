@@ -1,0 +1,36 @@
+*{
+  box-sizing: border-box;
+}
+
+.search-box {
+  margin: 50px;
+  /* background-color: aqua; */
+}
+.email {
+  width: 30%;
+}
+#logIn {
+  position: fixed;
+  top: 50%;
+  left: 45%;
+}
+#logOut {
+  margin: 1%;
+  position: fixed;
+  top: auto;
+  right: 1%;
+}
+#img {
+  margin-left: 3%;
+  border-radius: 50%;
+  border-color: gainsboro;
+}
+#nav h3{
+  margin-left: 1%;
+}
+#nav{
+  display: flex;
+  margin: 1% 0% 5% 1%;
+  width: 100%;
+  align-items: center;
+}

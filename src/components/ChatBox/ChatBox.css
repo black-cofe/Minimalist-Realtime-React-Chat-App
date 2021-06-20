@@ -1,0 +1,23 @@
+*{
+    box-sizing: border-box;
+}
+#chat {
+    position: relative;
+    width: 100%;
+    justify-self: center;
+}
+#chat-box {
+    margin: 0 auto;
+    background-color: snow;
+}
+#chat-box ul{
+    list-style: none;
+}
+#userIsSender {
+    text-align: right;
+    color: slateblue;
+}
+#userIsNotSender {
+    text-align: left;
+    color: sienna;
+}
