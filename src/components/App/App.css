@@ -9,6 +9,9 @@
 .email {
   width: 30%;
 }
+.has-error{
+  width:30%;
+}
 #logIn {
   position: fixed;
   top: 50%;

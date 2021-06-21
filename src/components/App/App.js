@@ -17,6 +17,7 @@ class App extends Component {
       user: null,
       email:"",
       loading:true,
+      redAlert:false
     }
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -36,24 +37,33 @@ class App extends Component {
   handleChange= (e)=> {
     this.setState({email:e.target.value});
   }
+  validateEmail = (email) => {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
   async handleSubmit(e){
-    if (this.state.user && this.state.loading===false){
-      const userInfo = this.state.user.v.src;
-      const db = firebase.firestore();
-      var uniqueId = null;
-      if (this.state.email<userInfo.email){
-        uniqueId = this.state.email.concat(userInfo.email);
-      }else if(this.state.email>userInfo.email) {
-        uniqueId = userInfo.email.concat(this.state.email);
+    if (this.validateEmail(this.state.email)){
+      if (this.state.user && this.state.loading===false){
+        const userInfo = this.state.user.v.src;
+        const db = firebase.firestore();
+        var uniqueId = null;
+        if (this.state.email<userInfo.email){
+          uniqueId = this.state.email.concat(userInfo.email);
+        }else if(this.state.email>userInfo.email) {
+          uniqueId = userInfo.email.concat(this.state.email);
+        }
+        if(uniqueId){
+          await db.collection("contacts").doc(uniqueId).set({user1:userInfo.email,user2:this.state.email});
+          window.location.reload();
+        }else {
+          console.log("Can't be same as yourself")
+          this.setState({email:""});
+        }
       }
-      if(uniqueId){
-        await db.collection("contacts").doc(uniqueId).set({user1:userInfo.email,user2:this.state.email});
-        window.location.reload();
-      }else {
-        console.log("Can't be same as yourself")
-        this.setState({email:""});
-      }
+    }else{
+      this.setState({redAlert:true});
     }
+
 
   }
   render() {
@@ -87,7 +97,7 @@ class App extends Component {
               <h3>{userInfo.displayName}</h3>
             </div>
             <div style={{marginLeft:"3%"}}>
-              <input className= "email" value={this.state.email} type="text" placeholder="Search Email Id..." name="email" onChange={this.handleChange}/>
+              <input value={this.state.email} type="email" id="email" placeholder="Email" class={(this.state.redAlert)?"has-error":"email"} onChange={this.handleChange}/>
               <button onClick={this.handleSubmit}>Chat with this Email</button>
             </div>
           </div>: (this.state.user)?<h3>Loading...</h3> : <div></div> 

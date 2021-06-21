@@ -14,7 +14,7 @@ class Form extends Component {
       message: "",
       messages: [],
       emails: [],
-      loading: false
+      loading: false,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleEmail = this.handleEmail.bind(this);
@@ -38,14 +38,13 @@ class Form extends Component {
     }
     return 0;
   }
-  
   async getChat() {
     this.setState({loading:true})
     const userInfo = this.props.user.v.src;
     const db = firebase.firestore();
     const chatsRefGet1 = db.collection("user").doc(userInfo.email).collection("chatsWith").doc(this.state.receiver).collection("chats").orderBy("createdAt","desc").limit(10);
     const chatsRefGet2 = db.collection("user").doc(this.state.receiver).collection("chatsWith").doc(userInfo.email).collection("chats").orderBy("createdAt","desc").limit(10);
-    this.setState({message:"",messages:[]});
+    // this.setState({message:"",messages:[]});
     
     var chats = [];
     await chatsRefGet1.get().then((querySnapshot) => {
@@ -60,6 +59,9 @@ class Form extends Component {
       })
     
     chats.sort(this.compare);
+    if(chats.length>10){
+      chats = chats.slice(11);
+    }
 
     this.setState({messages:chats});
     console.log(this.state.messages);
@@ -69,11 +71,13 @@ class Form extends Component {
   async handleSubmit(e) {
     e.preventDefault();
 
-    const db  = firebase.firestore();
-    const timestamp = firebase.firestore.FieldValue.serverTimestamp;
-    const userInfo = this.props.user.v.src;
-    const chatsRef = db.collection("user").doc(userInfo.email).collection("chatsWith").doc(this.state.receiver).collection("chats");
-    await chatsRef.add({message: this.state.message,createdAt: timestamp()});
+    if(this.state.message!==""){
+      const db  = firebase.firestore();
+      const timestamp = firebase.firestore.FieldValue.serverTimestamp;
+      const userInfo = this.props.user.v.src;
+      const chatsRef = db.collection("user").doc(userInfo.email).collection("chatsWith").doc(this.state.receiver).collection("chats");
+      await chatsRef.add({message: this.state.message,createdAt: timestamp()});
+    }
     
     this.setState({message:""});
   

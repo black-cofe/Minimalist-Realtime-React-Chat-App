@@ -21,7 +21,7 @@ class ChatBox extends React.Component {
                                         return <div id="userIsSender" key={index}>{msgs.message}</div> 
                                     } else{
                                         return <div id="userIsNotSender" key={index}>{msgs.message}</div>
-                                    }
+                                    } 
                                 })}
                         </div>
                         <div id="form">
