@@ -9,3 +9,5 @@ Special Instructions to run the app-
 3. yarn start or npm start in the terminal
 
 (Please check Firestore rules before you start your application)
+
+The CSS elements have been taken from https://taniarascia.github.io/primitive/
